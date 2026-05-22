@@ -492,7 +492,7 @@
                 <input
                     type="text"
                     id="keyword"
-                    placeholder="예: 전기, 광주, 조선대학교"
+                    placeholder="예: 게임 개발자가 되고 싶어요, 전기, 광주, 조선대학교"
                 >
 
                 <button onclick="searchMajor()">🔎 검색</button>
@@ -520,7 +520,7 @@
         <div class="service-stats">
             <span>📊 전국 대학 학과 데이터 기반</span>
             <span>🔎 학과·지역·학교명 통합 검색</span>
-            <span>🤖 AI 추천 분석 확장 예정</span>
+            <span>🤖 GPT API 기반 AI 추천 분석</span>
         </div>
 
         <div class="history-box">
@@ -680,49 +680,19 @@
             return "🎓";
         }
 
-        function generateAIRecommendation(keyword) {
-            if (keyword.includes("AI") || keyword.includes("컴퓨터") || keyword.includes("소프트웨어")) {
-                return `
-                    <div class="ai-box">
-                        <div class="ai-title">🤖 AI 추천 분석</div>
-                        <div class="ai-content">
-                            입력한 키워드는 컴퓨터·AI·소프트웨어 계열과 높은 연관성을 보입니다.<br>
-                            인공지능, 데이터, 정보통신 관련 학과도 함께 탐색해보세요.
-                        </div>
-                    </div>
-                `;
-            }
+        async function generateAIRecommendation(keyword) {
+            const response = await fetch(
+                `/ai/recommend?keyword=${encodeURIComponent(keyword)}`
+            );
 
-            if (keyword.includes("전기") || keyword.includes("전자") || keyword.includes("반도체")) {
-                return `
-                    <div class="ai-box">
-                        <div class="ai-title">🤖 AI 추천 분석</div>
-                        <div class="ai-content">
-                            입력한 키워드는 전기·전자·반도체 계열과 높은 연관성을 보입니다.<br>
-                            제어공학, 정보통신, 에너지공학 계열도 함께 확인해보세요.
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (keyword.includes("디자인") || keyword.includes("예술") || keyword.includes("미술")) {
-                return `
-                    <div class="ai-box">
-                        <div class="ai-title">🤖 AI 추천 분석</div>
-                        <div class="ai-content">
-                            입력한 키워드는 디자인·예술 계열과 높은 관련성을 보입니다.<br>
-                            시각디자인, 산업디자인, 미디어아트 계열 학과도 함께 탐색해보세요.
-                        </div>
-                    </div>
-                `;
-            }
+            const data = await response.json();
 
             return `
                 <div class="ai-box">
                     <div class="ai-title">🤖 AI 추천 분석</div>
+
                     <div class="ai-content">
-                        입력한 키워드를 기반으로 연관 학과를 분석했습니다.<br>
-                        다양한 학교와 세부 계열을 비교하며 탐색해보세요.
+                        ${data.recommendation.replace(/\n/g, "<br>")}
                     </div>
                 </div>
             `;
@@ -832,7 +802,13 @@
             const summaryDiv = document.getElementById("summary");
             const resultsDiv = document.getElementById("results");
 
-            aiDiv.innerHTML = generateAIRecommendation(keyword);
+            aiDiv.innerHTML = `
+                <div class="loading-box">
+                    <div class="spinner"></div>
+                    <span>AI가 관심 분야와 학과를 분석 중입니다...</span>
+                </div>
+            `;
+
             summaryDiv.innerHTML = "";
 
             resultsDiv.innerHTML = `
@@ -841,6 +817,9 @@
                     <span>교육 공공데이터에서 관련 학과 정보를 검색 중입니다...</span>
                 </div>
             `;
+
+            const aiResult = await generateAIRecommendation(keyword);
+            aiDiv.innerHTML = aiResult;
 
             const response = await fetch(url);
             const data = await response.json();
@@ -892,7 +871,6 @@
 
         renderRecentSearches();
         renderFavorites();
-
     </script>
 
 </body>

@@ -1,3 +1,4 @@
+from app.services.ai_service import generate_ai_recommendation
 from fastapi import APIRouter
 from app.services.major_service import (
     search_majors,
@@ -38,4 +39,13 @@ def search_region(region: str, limit: int = 50, offset: int = 0):
         "type": "region",
         "region": region,
         **data
+    }
+@router.get("/ai/recommend")
+def ai_recommend(keyword: str):
+
+    result = generate_ai_recommendation(keyword)
+
+    return {
+        "keyword": keyword,
+        "recommendation": result
     }
