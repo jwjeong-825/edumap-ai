@@ -2,10 +2,7 @@ import pandas as pd
 
 
 def load_major_data():
-    raw = pd.read_excel(
-        "app/data/majors.xlsx",
-        header=None
-    )
+    raw = pd.read_excel("app/data/majors.xlsx", header=None)
 
     df = raw.iloc[7:].copy()
 
@@ -24,48 +21,31 @@ def load_major_data():
         "학과상세소재지"
     ]
 
-    df = df.dropna(
-        subset=["학교명", "학과명"]
-    )
+    df = df.dropna(subset=["학교명", "학과명"])
+    df = df[df["학과상태"] != "폐지"]
 
     df = df[
-        df["학과상태"] != "폐지"
+        ~df["학과특성"].astype(str).str.contains("대학원", na=False)
     ]
 
     df = df[
-        ~df["학과특성"]
-        .astype(str)
-        .str.contains("대학원", na=False)
+        ~df["학교명"].astype(str).str.contains("대학원", na=False)
     ]
 
     df = df[
-        ~df["학교명"]
-        .astype(str)
-        .str.contains("대학원", na=False)
+        ~df["학교명"].astype(str).str.contains("사내", na=False)
     ]
 
     df = df[
-        ~df["학교명"]
-        .astype(str)
-        .str.contains("사내", na=False)
+        ~df["학교명"].astype(str).str.contains("사이버", na=False)
     ]
 
     df = df[
-        ~df["학교명"]
-        .astype(str)
-        .str.contains("사이버", na=False)
+        ~df["학교명"].astype(str).str.contains("방송통신", na=False)
     ]
 
     df = df[
-        ~df["학교명"]
-        .astype(str)
-        .str.contains("방송통신", na=False)
-    ]
-
-    df = df[
-        ~df["학교명"]
-        .astype(str)
-        .str.contains("기능", na=False)
+        ~df["학교명"].astype(str).str.contains("기능", na=False)
     ]
 
     df = df.drop_duplicates(
@@ -78,7 +58,21 @@ def load_major_data():
 MAJOR_DF = load_major_data()
 
 
-def search_majors(keyword: str):
+def paginate_results(results, limit: int, offset: int):
+    total_count = len(results)
+    paginated = results[offset:offset + limit]
+
+    return {
+        "total_count": total_count,
+        "count": len(paginated),
+        "limit": limit,
+        "offset": offset,
+        "has_more": offset + limit < total_count,
+        "results": paginated
+    }
+
+
+def search_majors(keyword: str, limit: int = 50, offset: int = 0):
     keyword = keyword.strip()
 
     results = []
@@ -114,28 +108,28 @@ def search_majors(keyword: str):
         reverse=True
     )
 
-    return results[:50]
+    return paginate_results(results, limit, offset)
 
 
-def search_by_university(university: str):
+def search_by_university(university: str, limit: int = 50, offset: int = 0):
     result = MAJOR_DF[
         MAJOR_DF["학교명"]
         .astype(str)
         .str.contains(university, case=False, na=False)
     ]
 
-    result = result.head(50)
+    results = result.to_dict(orient="records")
 
-    return result.to_dict(orient="records")
+    return paginate_results(results, limit, offset)
 
 
-def search_by_region(region: str):
+def search_by_region(region: str, limit: int = 50, offset: int = 0):
     result = MAJOR_DF[
         MAJOR_DF["대학소재지"]
         .astype(str)
         .str.contains(region, case=False, na=False)
     ]
 
-    result = result.head(50)
+    results = result.to_dict(orient="records")
 
-    return result.to_dict(orient="records")
+    return paginate_results(results, limit, offset)

@@ -2,18 +2,11 @@
 <html lang="ko">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduMap AI</title>
 
     <style>
-
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
 
         * {
@@ -229,39 +222,6 @@
             line-height: 1.5;
         }
 
-        .delete-favorite {
-           margin-left: 8px;
-           background: #fee2e2;
-           color: #b91c1c;
-           border: 1px solid #fecaca;
-           padding: 4px 10px;
-           border-radius: 999px;
-           font-size: 12px;
-           cursor: pointer;
-           box-shadow: none;
-       }
-
-       .delete-favorite:hover {
-           background: #fecaca;
-       }
-       .clear-history {
-           margin-left: 8px;
-           background: #f3f4f6;
-           color: #6b7280;
-           border: 1px solid #d1d5db;
-           padding: 5px 10px;
-           border-radius: 999px;
-           font-size: 12px;
-           cursor: pointer;
-           box-shadow: none;
-       }
-
-       .clear-history:hover {
-           background: #e5e7eb;
-           transform: none;
-           box-shadow: none;
-        }
-
         .favorite-button {
             background: #fff7ed;
             color: #c2410c;
@@ -276,6 +236,38 @@
             background: #ffedd5;
             transform: none;
             box-shadow: none;
+        }
+
+        .delete-favorite {
+            margin-left: 8px;
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: none;
+        }
+
+        .delete-favorite:hover {
+            background: #fecaca;
+        }
+
+        .clear-history {
+            margin-left: 8px;
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: none;
+        }
+
+        .clear-history:hover {
+            background: #e5e7eb;
         }
 
         .ai-box {
@@ -323,13 +315,8 @@
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .card {
@@ -471,41 +458,31 @@
                 font-size: 14px;
             }
         }
-
     </style>
-
 </head>
 
 <body>
 
     <section class="hero">
-
         <div class="container">
-
-            <p class="service-label">
-                Public Education Data Major Search Platform
-            </p>
+            <p class="service-label">Public Education Data Major Search Platform</p>
 
             <h1>🎓 EduMap AI</h1>
 
             <p class="subtitle">
                 키워드 기반 탐색을 통해 전국 대학의 관련 학과 정보를 빠르게 확인할 수 있는 교육 데이터 검색 서비스입니다.
             </p>
-
         </div>
-
     </section>
 
     <main class="main">
 
         <div class="search-box">
-
             <div class="search-title">
                 관심 키워드, 지역, 학교명을 입력해 학과 정보를 탐색해보세요.
             </div>
 
             <div class="search-row">
-
                 <select id="searchType">
                     <option value="major">학과 키워드</option>
                     <option value="region">지역</option>
@@ -518,17 +495,11 @@
                     placeholder="예: 전기, 광주, 조선대학교"
                 >
 
-                <button onclick="searchMajor()">
-                    🔎 검색
-                </button>
-
+                <button onclick="searchMajor()">🔎 검색</button>
             </div>
 
             <div class="inside-keywords">
-
-                <span class="inside-label">
-                    자주 찾는 항목 :
-                </span>
+                <span class="inside-label">자주 찾는 항목 :</span>
 
                 <button class="inside-chip" onclick="quickSearch('AI')">AI</button>
                 <button class="inside-chip" onclick="quickSearch('반도체')">반도체</button>
@@ -536,9 +507,7 @@
                 <button class="inside-chip" onclick="quickSearch('간호')">간호</button>
                 <button class="inside-chip" onclick="quickSearch('디자인')">디자인</button>
                 <button class="inside-chip" onclick="quickSearch('전기')">전기</button>
-
             </div>
-
         </div>
 
         <div class="feature-text">
@@ -556,9 +525,10 @@
 
         <div class="history-box">
             <div class="history-title">
-              최근 검색어
-              <button class="clear-history" onclick="clearRecentSearches()">전체 삭제</button>
+                최근 검색어
+                <button class="clear-history" onclick="clearRecentSearches()">전체 삭제</button>
             </div>
+
             <div id="recentSearches"></div>
         </div>
 
@@ -574,8 +544,12 @@
     </main>
 
     <script>
-
         const keywordInput = document.getElementById("keyword");
+
+        let currentSearchType = "";
+        let currentKeyword = "";
+        let currentOffset = 0;
+        const LIMIT = 50;
 
         keywordInput.addEventListener("keydown", function(event) {
             if (event.key === "Enter") {
@@ -616,6 +590,11 @@
             `).join("");
         }
 
+        function clearRecentSearches() {
+            localStorage.removeItem("recentSearches");
+            renderRecentSearches();
+        }
+
         function saveFavorite(university, major, region) {
             let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
             const key = `${university}-${major}`;
@@ -634,21 +613,15 @@
             localStorage.setItem("favorites", JSON.stringify(favorites));
             renderFavorites();
         }
+
         function removeFavorite(key) {
+            let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-           let favorites =
-               JSON.parse(localStorage.getItem("favorites")) || [];
+            favorites = favorites.filter(item => item.key !== key);
 
-           favorites =
-               favorites.filter(item => item.key !== key);
-
-           localStorage.setItem(
-               "favorites",
-               JSON.stringify(favorites)
-            );
-
-    renderFavorites();
-}
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            renderFavorites();
+        }
 
         function renderFavorites() {
             const favoriteDiv = document.getElementById("favorites");
@@ -659,20 +632,18 @@
                 return;
             }
 
-           favoriteDiv.innerHTML = favorites.map(item => `
-           <div class="favorite-item">
+            favoriteDiv.innerHTML = favorites.map(item => `
+                <div class="favorite-item">
+                    ⭐ ${item.university} - ${item.major} (${item.region})
 
-               ⭐ ${item.university} - ${item.major} (${item.region})
-
-               <button
-                   class="delete-favorite"
-                   onclick="removeFavorite('${item.key}')"
-               >
-                   삭제
-               </button>
-
-           </div>
-       `).join("");
+                    <button
+                        class="delete-favorite"
+                        onclick="removeFavorite('${item.key}')"
+                    >
+                        삭제
+                    </button>
+                </div>
+            `).join("");
         }
 
         function getMajorIcon(item) {
@@ -769,59 +740,30 @@
             window.open(url, "_blank");
         }
 
-        async function searchMajor() {
-            const searchType = document.getElementById("searchType").value;
-            const keyword = document.getElementById("keyword").value.trim();
-
-            if (keyword === "") {
-                alert("검색어를 입력하세요.");
-                return;
-            }
-
-            saveRecentSearch(keyword);
-
-            let url = "";
-
+        function buildUrl(searchType, keyword, offset) {
             if (searchType === "major") {
-                url = `/recommend?keyword=${encodeURIComponent(keyword)}`;
-            } else if (searchType === "region") {
-                url = `/search/region?region=${encodeURIComponent(keyword)}`;
-            } else if (searchType === "university") {
-                url = `/search/university?university=${encodeURIComponent(keyword)}`;
+                return `/recommend?keyword=${encodeURIComponent(keyword)}&limit=${LIMIT}&offset=${offset}`;
             }
 
-            const aiDiv = document.getElementById("aiRecommendation");
-            const summaryDiv = document.getElementById("summary");
+            if (searchType === "region") {
+                return `/search/region?region=${encodeURIComponent(keyword)}&limit=${LIMIT}&offset=${offset}`;
+            }
+
+            if (searchType === "university") {
+                return `/search/university?university=${encodeURIComponent(keyword)}&limit=${LIMIT}&offset=${offset}`;
+            }
+
+            return "";
+        }
+
+        function renderCards(results, append = false) {
             const resultsDiv = document.getElementById("results");
 
-            aiDiv.innerHTML = generateAIRecommendation(keyword);
-            summaryDiv.innerHTML = "";
-
-            resultsDiv.innerHTML = `
-                <div class="loading-box">
-                    <div class="spinner"></div>
-                    <span>교육 공공데이터에서 관련 학과 정보를 검색 중입니다...</span>
-                </div>
-            `;
-
-            const response = await fetch(url);
-            const data = await response.json();
-
-            resultsDiv.innerHTML = "";
-
-            if (data.results.length === 0) {
-                summaryDiv.innerHTML = "";
-                resultsDiv.innerHTML = `
-                    <div class="empty">
-                        검색 결과가 없습니다.
-                    </div>
-                `;
-                return;
+            if (!append) {
+                resultsDiv.innerHTML = "";
             }
 
-            summaryDiv.innerHTML = `상위 ${data.results.length}개 결과를 표시합니다.`;
-
-            data.results.forEach((item, index) => {
+            results.forEach((item, index) => {
                 const icon = getMajorIcon(item);
 
                 resultsDiv.innerHTML += `
@@ -852,11 +794,103 @@
             });
         }
 
+        function renderLoadMoreButton(hasMore) {
+            const resultsDiv = document.getElementById("results");
+            const oldButton = document.getElementById("loadMoreArea");
+
+            if (oldButton) {
+                oldButton.remove();
+            }
+
+            if (hasMore) {
+                resultsDiv.innerHTML += `
+                    <div id="loadMoreArea" style="text-align:center; margin: 24px 0;">
+                        <button onclick="loadMoreResults()">더보기</button>
+                    </div>
+                `;
+            }
+        }
+
+        async function searchMajor() {
+            const searchType = document.getElementById("searchType").value;
+            const keyword = document.getElementById("keyword").value.trim();
+
+            if (keyword === "") {
+                alert("검색어를 입력하세요.");
+                return;
+            }
+
+            saveRecentSearch(keyword);
+
+            currentSearchType = searchType;
+            currentKeyword = keyword;
+            currentOffset = 0;
+
+            const url = buildUrl(currentSearchType, currentKeyword, currentOffset);
+
+            const aiDiv = document.getElementById("aiRecommendation");
+            const summaryDiv = document.getElementById("summary");
+            const resultsDiv = document.getElementById("results");
+
+            aiDiv.innerHTML = generateAIRecommendation(keyword);
+            summaryDiv.innerHTML = "";
+
+            resultsDiv.innerHTML = `
+                <div class="loading-box">
+                    <div class="spinner"></div>
+                    <span>교육 공공데이터에서 관련 학과 정보를 검색 중입니다...</span>
+                </div>
+            `;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            resultsDiv.innerHTML = "";
+
+            if (data.results.length === 0) {
+                summaryDiv.innerHTML = "";
+                resultsDiv.innerHTML = `
+                    <div class="empty">
+                        검색 결과가 없습니다.
+                    </div>
+                `;
+                return;
+            }
+
+            summaryDiv.innerHTML =
+                `총 ${data.total_count}개 중 ${data.offset + data.count}개를 표시합니다.`;
+
+            renderCards(data.results, false);
+            renderLoadMoreButton(data.has_more);
+
+            currentOffset = data.offset + data.count;
+        }
+
+        async function loadMoreResults() {
+            const url = buildUrl(currentSearchType, currentKeyword, currentOffset);
+            const loadMoreArea = document.getElementById("loadMoreArea");
+
+            if (loadMoreArea) {
+                loadMoreArea.innerHTML = `
+                    <button disabled>불러오는 중...</button>
+                `;
+            }
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            renderCards(data.results, true);
+            renderLoadMoreButton(data.has_more);
+
+            const summaryDiv = document.getElementById("summary");
+
+            summaryDiv.innerHTML =
+                `총 ${data.total_count}개 중 ${data.offset + data.count}개를 표시합니다.`;
+
+            currentOffset = data.offset + data.count;
+        }
+
         renderRecentSearches();
-        function clearRecentSearches() {
-           localStorage.removeItem("recentSearches");
-           renderRecentSearches();
-       }
         renderFavorites();
 
     </script>

@@ -9,36 +9,33 @@ router = APIRouter()
 
 
 @router.get("/recommend")
-def recommend(keyword: str):
-    results = search_majors(keyword)
+def recommend(keyword: str, limit: int = 50, offset: int = 0):
+    data = search_majors(keyword, limit, offset)
 
     return {
         "type": "major_keyword",
         "keyword": keyword,
-        "count": len(results),
-        "results": results
+        **data
     }
 
 
 @router.get("/search/university")
-def search_university(university: str):
-    results = search_by_university(university)
+def search_university(university: str, limit: int = 50, offset: int = 0):
+    data = search_by_university(university, limit, offset)
 
     return {
         "type": "university",
         "university": university,
-        "count": len(results),
-        "results": results
+        **data
     }
 
 
 @router.get("/search/region")
-def search_region(region: str):
-    results = search_by_region(region)
+def search_region(region: str, limit: int = 50, offset: int = 0):
+    data = search_by_region(region, limit, offset)
 
     return {
         "type": "region",
         "region": region,
-        "count": len(results),
-        "results": results
+        **data
     }
