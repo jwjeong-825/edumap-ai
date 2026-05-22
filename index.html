@@ -229,6 +229,39 @@
             line-height: 1.5;
         }
 
+        .delete-favorite {
+           margin-left: 8px;
+           background: #fee2e2;
+           color: #b91c1c;
+           border: 1px solid #fecaca;
+           padding: 4px 10px;
+           border-radius: 999px;
+           font-size: 12px;
+           cursor: pointer;
+           box-shadow: none;
+       }
+
+       .delete-favorite:hover {
+           background: #fecaca;
+       }
+       .clear-history {
+           margin-left: 8px;
+           background: #f3f4f6;
+           color: #6b7280;
+           border: 1px solid #d1d5db;
+           padding: 5px 10px;
+           border-radius: 999px;
+           font-size: 12px;
+           cursor: pointer;
+           box-shadow: none;
+       }
+
+       .clear-history:hover {
+           background: #e5e7eb;
+           transform: none;
+           box-shadow: none;
+        }
+
         .favorite-button {
             background: #fff7ed;
             color: #c2410c;
@@ -522,7 +555,10 @@
         </div>
 
         <div class="history-box">
-            <div class="history-title">최근 검색어</div>
+            <div class="history-title">
+              최근 검색어
+              <button class="clear-history" onclick="clearRecentSearches()">전체 삭제</button>
+            </div>
             <div id="recentSearches"></div>
         </div>
 
@@ -598,6 +634,21 @@
             localStorage.setItem("favorites", JSON.stringify(favorites));
             renderFavorites();
         }
+        function removeFavorite(key) {
+
+           let favorites =
+               JSON.parse(localStorage.getItem("favorites")) || [];
+
+           favorites =
+               favorites.filter(item => item.key !== key);
+
+           localStorage.setItem(
+               "favorites",
+               JSON.stringify(favorites)
+            );
+
+    renderFavorites();
+}
 
         function renderFavorites() {
             const favoriteDiv = document.getElementById("favorites");
@@ -608,11 +659,20 @@
                 return;
             }
 
-            favoriteDiv.innerHTML = favorites.map(item => `
-                <div class="favorite-item">
-                    ⭐ ${item.university} - ${item.major} (${item.region})
-                </div>
-            `).join("");
+           favoriteDiv.innerHTML = favorites.map(item => `
+           <div class="favorite-item">
+
+               ⭐ ${item.university} - ${item.major} (${item.region})
+
+               <button
+                   class="delete-favorite"
+                   onclick="removeFavorite('${item.key}')"
+               >
+                   삭제
+               </button>
+
+           </div>
+       `).join("");
         }
 
         function getMajorIcon(item) {
@@ -793,6 +853,10 @@
         }
 
         renderRecentSearches();
+        function clearRecentSearches() {
+           localStorage.removeItem("recentSearches");
+           renderRecentSearches();
+       }
         renderFavorites();
 
     </script>
