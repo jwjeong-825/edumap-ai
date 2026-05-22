@@ -3,52 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <title>EduMap AI</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fb;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #1f3c88;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        select, input, button {
+            padding: 11px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        input {
+            width: 360px;
+        }
+
+        button {
+            background-color: #1f3c88;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #162b63;
+        }
+
+        #summary {
+            margin-bottom: 15px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .card:hover {
+            border-color: #1f3c88;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #1f3c88;
+        }
+
+        .info {
+            margin: 8px 0;
+            color: #333;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #eef2ff;
+            padding: 6px 9px;
+            border-radius: 8px;
+            margin-right: 6px;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .button-area {
+            margin-top: 15px;
+        }
+
+        .small-button {
+            background-color: #f1f3f5;
+            color: #333;
+            border: 1px solid #ddd;
+            margin-right: 6px;
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+
+        .small-button:hover {
+            background-color: #e9ecef;
+        }
+
+        .empty {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>🎓 EduMap AI</h1>
+    <div class="container">
+        <h1>🎓 EduMap AI</h1>
+        <p class="subtitle">교육 공공데이터 기반 학과 탐색 서비스</p>
 
-    <input type="text" id="keyword" placeholder="전공 키워드 입력">
-    <select id="searchType">
-    <option value="major">학과 키워드</option>
-    <option value="university">학교명</option>
-    <option value="region">지역</option>
-</select>
+        <div class="search-box">
+            <select id="searchType">
+                <option value="major">학과 키워드</option>
+                <option value="region">지역</option>
+                <option value="university">학교명</option>
+            </select>
 
-<input type="text" id="keyword" placeholder="검색어 입력"><select id="searchType">
-    <option value="major">학과 키워드</option>
-    <option value="university">학교명</option>
-    <option value="region">지역</option>
-</select>
+            <input type="text" id="keyword" placeholder="예: 전기, 광주, 조선대학교">
+            <button onclick="searchMajor()">검색</button>
+        </div>
 
-<input type="text" id="keyword" placeholder="검색어 입력">
-    <button onclick="searchMajor()">검색</button>
-
-    <div id="results"></div>
+        <div id="summary"></div>
+        <div id="results"></div>
+    </div>
 
     <script>
+        const keywordInput = document.getElementById("keyword");
+
+        keywordInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                searchMajor();
+            }
+        });
+
         async function searchMajor() {
+            const searchType = document.getElementById("searchType").value;
+            const keyword = document.getElementById("keyword").value.trim();
 
-            const keyword = document.getElementById("keyword").value;
+            if (keyword === "") {
+                alert("검색어를 입력하세요.");
+                return;
+            }
 
-            const response = await fetch(
-                `/recommend?keyword=${keyword}`
-            );
+            let url = "";
 
-            const data = await response.json();
+            if (searchType === "major") {
+                url = `/recommend?keyword=${encodeURIComponent(keyword)}`;
+            } else if (searchType === "region") {
+                url = `/search/region?region=${encodeURIComponent(keyword)}`;
+            } else if (searchType === "university") {
+                url = `/search/university?university=${encodeURIComponent(keyword)}`;
+            }
 
+            const summaryDiv = document.getElementById("summary");
             const resultsDiv = document.getElementById("results");
+
+            summaryDiv.innerHTML = "검색 중입니다...";
+            resultsDiv.innerHTML = "";
+
+            const response = await fetch(url);
+            const data = await response.json();
 
             resultsDiv.innerHTML = "";
 
-            data.results.forEach(item => {
+            if (data.results.length === 0) {
+                summaryDiv.innerHTML = "";
+                resultsDiv.innerHTML = `
+                    <div class="empty">
+                        검색 결과가 없습니다.
+                    </div>
+                `;
+                return;
+            }
 
+            summaryDiv.innerHTML = `상위 ${data.results.length}개 결과를 표시합니다.`;
+
+            data.results.forEach(item => {
                 resultsDiv.innerHTML += `
-                    <hr>
-                    <h3>${item.학교명}</h3>
-                    <p>학과명: ${item.학과명}</p>
-                    <p>지역: ${item.대학소재지}</p>
-                    <p>계열: ${item.표준중계열}</p>
+                    <div class="card">
+                        <h3>${item.학교명}</h3>
+
+                        <p class="info"><strong>학과명:</strong> ${item.학과명}</p>
+                        <p class="info"><strong>지역:</strong> ${item.대학소재지}</p>
+
+                        <span class="tag">공공데이터 계열: ${item.표준중계열}</span>
+                        <span class="tag">세부계열: ${item.표준소계열}</span>
+
+                        <div class="button-area">
+                            <button class="small-button">학과 정보</button>
+                            <button class="small-button">입시 정보</button>
+                        </div>
+                    </div>
                 `;
             });
         }

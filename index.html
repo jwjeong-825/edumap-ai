@@ -1,139 +1,714 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
+
     <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>EduMap AI</title>
 
     <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f7fb;
             margin: 0;
-            padding: 40px;
+            font-family: 'Pretendard', Arial, sans-serif;
+            background: linear-gradient(135deg, #eef3ff, #f8fbff);
+            color: #1f2937;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1f3c88, #4f7cff);
+            color: white;
+            padding: 60px 40px 80px;
+            border-bottom-left-radius: 36px;
+            border-bottom-right-radius: 36px;
+            box-shadow: 0 12px 30px rgba(31, 60, 136, 0.25);
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
+        .service-label {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background-color: rgba(255,255,255,0.18);
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+
         h1 {
-            color: #1f3c88;
-            margin-bottom: 5px;
+            font-size: 42px;
+            margin: 0 0 12px;
         }
 
         .subtitle {
-            color: #555;
-            margin-bottom: 25px;
+            font-size: 18px;
+            line-height: 1.6;
+            opacity: 0.95;
+            margin: 0;
+        }
+
+        .main {
+            max-width: 1000px;
+            margin: -45px auto 40px;
+            padding: 0 40px;
+        }
+
+        .search-box,
+        .feature-text,
+        .history-box,
+        .ai-box,
+        .card,
+        .empty,
+        .loading-box {
+            box-shadow: 0 10px 24px rgba(31, 60, 136, 0.08);
         }
 
         .search-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 14px;
-            margin-bottom: 25px;
-            border: 1px solid #e0e0e0;
+            background: linear-gradient(180deg, #ffffff, #f9fbff);
+            padding: 26px;
+            border-radius: 22px;
+            margin-bottom: 22px;
+            border: 1px solid #e0e7ff;
+            box-shadow:
+                0 18px 35px rgba(31, 60, 136, 0.18),
+                inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
-        select, input, button {
-            padding: 11px;
+        .search-title {
+            font-weight: bold;
+            margin-bottom: 14px;
+            color: #1f3c88;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        select,
+        input,
+        button {
+            padding: 13px;
             font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
+            border-radius: 12px;
+            border: 1px solid #d1d5db;
+        }
+
+        select {
+            width: 150px;
+            background-color: white;
         }
 
         input {
-            width: 360px;
+            flex: 1;
         }
 
         button {
-            background-color: #1f3c88;
+            background: linear-gradient(135deg, #1f3c88, #4f7cff);
             color: white;
             cursor: pointer;
             border: none;
+            font-weight: bold;
+            box-shadow: 0 6px 14px rgba(31, 60, 136, 0.25);
+            transition: 0.2s;
         }
 
         button:hover {
-            background-color: #162b63;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(31, 60, 136, 0.32);
+        }
+
+        .inside-keywords {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding-left: 2px;
+        }
+
+        .inside-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .inside-chip {
+            background: #eef2ff;
+            color: #1f3c88;
+            border: 1px solid #dbe4ff;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: none;
+            transition: 0.15s;
+        }
+
+        .inside-chip:hover {
+            background: #dbe4ff;
+            transform: translateY(-1px);
+        }
+
+        .feature-text {
+            background-color: rgba(255,255,255,0.75);
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+            color: #374151;
+            line-height: 1.7;
+        }
+
+        .feature-text strong {
+            color: #1f3c88;
+        }
+
+        .service-stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .service-stats span {
+            background: rgba(255,255,255,0.85);
+            border: 1px solid #dbe4ff;
+            color: #1f3c88;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 8px 18px rgba(31, 60, 136, 0.08);
+        }
+
+        .history-box {
+            background: rgba(255,255,255,0.78);
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+
+        .history-title {
+            font-weight: 700;
+            color: #1f3c88;
+            margin-bottom: 10px;
+        }
+
+        .history-chip {
+            background: #eef2ff;
+            color: #1f3c88;
+            border: 1px solid #dbe4ff;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            box-shadow: none;
+        }
+
+        .favorite-item {
+            margin-bottom: 8px;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .favorite-button {
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+            margin-left: 6px;
+            padding: 9px 12px;
+            font-size: 14px;
+            box-shadow: none;
+        }
+
+        .favorite-button:hover {
+            background: #ffedd5;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .ai-box {
+            background: linear-gradient(135deg, #f4f7ff, #ffffff);
+            border: 1px solid #dbe4ff;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .ai-title {
+            font-weight: bold;
+            color: #1f3c88;
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        .ai-content {
+            color: #374151;
+            line-height: 1.7;
+        }
+
+        #summary {
+            margin-bottom: 15px;
+            color: #374151;
+            font-weight: bold;
+        }
+
+        .loading-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: white;
+            padding: 18px 20px;
+            border-radius: 16px;
+        }
+
+        .spinner {
+            width: 22px;
+            height: 22px;
+            border: 3px solid #dbe4ff;
+            border-top: 3px solid #1f3c88;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 14px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            display: flex;
+            gap: 18px;
+            background: linear-gradient(180deg, #ffffff, #fbfcff);
+            padding: 22px;
+            border-radius: 20px;
+            margin-bottom: 18px;
+            border: 1px solid #e5e7eb;
+            animation: fadeUp 0.35s ease both;
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card:hover {
-            border-color: #1f3c88;
+            border-color: #4f7cff;
+            transform: translateY(-3px);
+            box-shadow: 0 18px 34px rgba(31, 60, 136, 0.16);
+            transition: 0.2s;
+        }
+
+        .major-icon {
+            min-width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #eef2ff, #dbeafe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .card-content {
+            flex: 1;
         }
 
         .card h3 {
             margin-top: 0;
+            margin-bottom: 10px;
             color: #1f3c88;
         }
 
         .info {
             margin: 8px 0;
-            color: #333;
+            color: #374151;
         }
 
         .tag {
             display: inline-block;
             background-color: #eef2ff;
-            padding: 6px 9px;
-            border-radius: 8px;
+            color: #1f3c88;
+            padding: 7px 10px;
+            border-radius: 999px;
             margin-right: 6px;
             margin-top: 8px;
             font-size: 14px;
         }
 
         .button-area {
-            margin-top: 15px;
+            margin-top: 16px;
         }
 
         .small-button {
-            background-color: #f1f3f5;
-            color: #333;
-            border: 1px solid #ddd;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
             margin-right: 6px;
-            padding: 8px 10px;
+            padding: 9px 12px;
             font-size: 14px;
+            box-shadow: none;
         }
 
         .small-button:hover {
-            background-color: #e9ecef;
+            background-color: #e9eefc;
+            color: #1f3c88;
+            transform: none;
+            box-shadow: none;
         }
 
         .empty {
             background-color: white;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 24px;
+            border-radius: 16px;
         }
+
+        @media (max-width: 700px) {
+            .hero {
+                padding: 42px 24px 70px;
+            }
+
+            .main {
+                padding: 0 20px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+            select {
+                width: 100%;
+            }
+
+            .card {
+                flex-direction: column;
+            }
+
+            .major-icon {
+                width: 58px;
+            }
+
+            .service-stats {
+                flex-direction: column;
+            }
+
+            .service-stats span {
+                width: 100%;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .feature-text {
+                font-size: 14px;
+            }
+        }
+
     </style>
+
 </head>
+
 <body>
 
-    <div class="container">
-        <h1>🎓 EduMap AI</h1>
-        <p class="subtitle">교육 공공데이터 기반 학과 탐색 서비스</p>
+    <section class="hero">
 
-        <div class="search-box">
-            <select id="searchType">
-                <option value="major">학과 키워드</option>
-                <option value="region">지역</option>
-                <option value="university">학교명</option>
-            </select>
+        <div class="container">
 
-            <input type="text" id="keyword" placeholder="예: 전기, 광주, 조선대학교">
-            <button onclick="searchMajor()">검색</button>
+            <p class="service-label">
+                Public Education Data Major Search Platform
+            </p>
+
+            <h1>🎓 EduMap AI</h1>
+
+            <p class="subtitle">
+                키워드 기반 탐색을 통해 전국 대학의 관련 학과 정보를 빠르게 확인할 수 있는 교육 데이터 검색 서비스입니다.
+            </p>
+
         </div>
 
+    </section>
+
+    <main class="main">
+
+        <div class="search-box">
+
+            <div class="search-title">
+                관심 키워드, 지역, 학교명을 입력해 학과 정보를 탐색해보세요.
+            </div>
+
+            <div class="search-row">
+
+                <select id="searchType">
+                    <option value="major">학과 키워드</option>
+                    <option value="region">지역</option>
+                    <option value="university">학교명</option>
+                </select>
+
+                <input
+                    type="text"
+                    id="keyword"
+                    placeholder="예: 전기, 광주, 조선대학교"
+                >
+
+                <button onclick="searchMajor()">
+                    🔎 검색
+                </button>
+
+            </div>
+
+            <div class="inside-keywords">
+
+                <span class="inside-label">
+                    자주 찾는 항목 :
+                </span>
+
+                <button class="inside-chip" onclick="quickSearch('AI')">AI</button>
+                <button class="inside-chip" onclick="quickSearch('반도체')">반도체</button>
+                <button class="inside-chip" onclick="quickSearch('컴퓨터')">컴퓨터</button>
+                <button class="inside-chip" onclick="quickSearch('간호')">간호</button>
+                <button class="inside-chip" onclick="quickSearch('디자인')">디자인</button>
+                <button class="inside-chip" onclick="quickSearch('전기')">전기</button>
+
+            </div>
+
+        </div>
+
+        <div class="feature-text">
+            <strong>학과 키워드 검색</strong> +
+            <strong>지역 기반 탐색</strong> +
+            <strong>학교명 검색</strong><br>
+            관심 분야와 연관된 전국 대학 학과 정보를 빠르게 탐색하고 비교할 수 있습니다.
+        </div>
+
+        <div class="service-stats">
+            <span>📊 전국 대학 학과 데이터 기반</span>
+            <span>🔎 학과·지역·학교명 통합 검색</span>
+            <span>🤖 AI 추천 분석 확장 예정</span>
+        </div>
+
+        <div class="history-box">
+            <div class="history-title">최근 검색어</div>
+            <div id="recentSearches"></div>
+        </div>
+
+        <div class="history-box">
+            <div class="history-title">즐겨찾기 학과</div>
+            <div id="favorites"></div>
+        </div>
+
+        <div id="aiRecommendation"></div>
+        <div id="summary"></div>
         <div id="results"></div>
-    </div>
+
+    </main>
 
     <script>
+
+        const keywordInput = document.getElementById("keyword");
+
+        keywordInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                searchMajor();
+            }
+        });
+
+        function quickSearch(keyword) {
+            document.getElementById("searchType").value = "major";
+            document.getElementById("keyword").value = keyword;
+            searchMajor();
+        }
+
+        function saveRecentSearch(keyword) {
+            let searches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+
+            searches = searches.filter(item => item !== keyword);
+            searches.unshift(keyword);
+            searches = searches.slice(0, 6);
+
+            localStorage.setItem("recentSearches", JSON.stringify(searches));
+            renderRecentSearches();
+        }
+
+        function renderRecentSearches() {
+            const recentDiv = document.getElementById("recentSearches");
+            const searches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+
+            if (searches.length === 0) {
+                recentDiv.innerHTML = "최근 검색어가 없습니다.";
+                return;
+            }
+
+            recentDiv.innerHTML = searches.map(keyword => `
+                <button class="history-chip" onclick="quickSearch('${keyword}')">
+                    ${keyword}
+                </button>
+            `).join("");
+        }
+
+        function saveFavorite(university, major, region) {
+            let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+            const key = `${university}-${major}`;
+
+            const exists = favorites.some(item => item.key === key);
+
+            if (!exists) {
+                favorites.unshift({
+                    key: key,
+                    university: university,
+                    major: major,
+                    region: region
+                });
+            }
+
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            renderFavorites();
+        }
+
+        function renderFavorites() {
+            const favoriteDiv = document.getElementById("favorites");
+            const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+            if (favorites.length === 0) {
+                favoriteDiv.innerHTML = "즐겨찾기한 학과가 없습니다.";
+                return;
+            }
+
+            favoriteDiv.innerHTML = favorites.map(item => `
+                <div class="favorite-item">
+                    ⭐ ${item.university} - ${item.major} (${item.region})
+                </div>
+            `).join("");
+        }
+
+        function getMajorIcon(item) {
+            const text = `${item.학과명 || ""} ${item.표준중계열 || ""} ${item.표준소계열 || ""}`;
+
+            if (text.includes("컴퓨터") || text.includes("소프트웨어") || text.includes("AI") || text.includes("인공지능") || text.includes("정보")) {
+                return "💻";
+            }
+
+            if (text.includes("전기") || text.includes("전자") || text.includes("반도체")) {
+                return "⚡";
+            }
+
+            if (text.includes("기계") || text.includes("자동차") || text.includes("로봇")) {
+                return "⚙️";
+            }
+
+            if (text.includes("의학") || text.includes("간호") || text.includes("보건")) {
+                return "🏥";
+            }
+
+            if (text.includes("경영") || text.includes("경제") || text.includes("회계")) {
+                return "📈";
+            }
+
+            if (text.includes("디자인") || text.includes("예술") || text.includes("미술") || text.includes("체육")) {
+                return "🎨";
+            }
+
+            if (text.includes("교육") || text.includes("유아") || text.includes("교직")) {
+                return "📚";
+            }
+
+            return "🎓";
+        }
+
+        function generateAIRecommendation(keyword) {
+            if (keyword.includes("AI") || keyword.includes("컴퓨터") || keyword.includes("소프트웨어")) {
+                return `
+                    <div class="ai-box">
+                        <div class="ai-title">🤖 AI 추천 분석</div>
+                        <div class="ai-content">
+                            입력한 키워드는 컴퓨터·AI·소프트웨어 계열과 높은 연관성을 보입니다.<br>
+                            인공지능, 데이터, 정보통신 관련 학과도 함께 탐색해보세요.
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (keyword.includes("전기") || keyword.includes("전자") || keyword.includes("반도체")) {
+                return `
+                    <div class="ai-box">
+                        <div class="ai-title">🤖 AI 추천 분석</div>
+                        <div class="ai-content">
+                            입력한 키워드는 전기·전자·반도체 계열과 높은 연관성을 보입니다.<br>
+                            제어공학, 정보통신, 에너지공학 계열도 함께 확인해보세요.
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (keyword.includes("디자인") || keyword.includes("예술") || keyword.includes("미술")) {
+                return `
+                    <div class="ai-box">
+                        <div class="ai-title">🤖 AI 추천 분석</div>
+                        <div class="ai-content">
+                            입력한 키워드는 디자인·예술 계열과 높은 관련성을 보입니다.<br>
+                            시각디자인, 산업디자인, 미디어아트 계열 학과도 함께 탐색해보세요.
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="ai-box">
+                    <div class="ai-title">🤖 AI 추천 분석</div>
+                    <div class="ai-content">
+                        입력한 키워드를 기반으로 연관 학과를 분석했습니다.<br>
+                        다양한 학교와 세부 계열을 비교하며 탐색해보세요.
+                    </div>
+                </div>
+            `;
+        }
+
+        function openMajorInfo(university, major) {
+            if (!university || !major) {
+                alert("정보가 부족합니다.");
+                return;
+            }
+
+            const query = `${university} ${major}`;
+            const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+
+            window.open(url, "_blank");
+        }
+
         async function searchMajor() {
             const searchType = document.getElementById("searchType").value;
             const keyword = document.getElementById("keyword").value.trim();
@@ -142,6 +717,8 @@
                 alert("검색어를 입력하세요.");
                 return;
             }
+
+            saveRecentSearch(keyword);
 
             let url = "";
 
@@ -153,13 +730,27 @@
                 url = `/search/university?university=${encodeURIComponent(keyword)}`;
             }
 
+            const aiDiv = document.getElementById("aiRecommendation");
+            const summaryDiv = document.getElementById("summary");
+            const resultsDiv = document.getElementById("results");
+
+            aiDiv.innerHTML = generateAIRecommendation(keyword);
+            summaryDiv.innerHTML = "";
+
+            resultsDiv.innerHTML = `
+                <div class="loading-box">
+                    <div class="spinner"></div>
+                    <span>교육 공공데이터에서 관련 학과 정보를 검색 중입니다...</span>
+                </div>
+            `;
+
             const response = await fetch(url);
             const data = await response.json();
 
-            const resultsDiv = document.getElementById("results");
             resultsDiv.innerHTML = "";
 
             if (data.results.length === 0) {
+                summaryDiv.innerHTML = "";
                 resultsDiv.innerHTML = `
                     <div class="empty">
                         검색 결과가 없습니다.
@@ -168,26 +759,44 @@
                 return;
             }
 
-            data.results.forEach(item => {
+            summaryDiv.innerHTML = `상위 ${data.results.length}개 결과를 표시합니다.`;
+
+            data.results.forEach((item, index) => {
+                const icon = getMajorIcon(item);
+
                 resultsDiv.innerHTML += `
-                    <div class="card">
-                        <h3>${item.학교명}</h3>
+                    <div class="card" style="animation-delay: ${index * 0.03}s">
+                        <div class="major-icon">${icon}</div>
 
-                        <p class="info"><strong>학과명:</strong> ${item.학과명}</p>
-                        <p class="info"><strong>지역:</strong> ${item.대학소재지}</p>
+                        <div class="card-content">
+                            <h3>${item.학교명}</h3>
 
-                        <span class="tag">공공데이터 계열: ${item.표준중계열}</span>
-                        <span class="tag">세부계열: ${item.표준소계열}</span>
+                            <p class="info"><strong>학과명:</strong> ${item.학과명}</p>
+                            <p class="info"><strong>지역:</strong> ${item.대학소재지}</p>
 
-                        <div class="button-area">
-                            <button class="small-button">학과 정보</button>
-                            <button class="small-button">입시 정보</button>
+                            <span class="tag">하위 계열: ${item.표준중계열}</span>
+                            <span class="tag">세부계열: ${item.표준소계열}</span>
+
+                            <div class="button-area">
+                                <button class="small-button" onclick="openMajorInfo('${item.학교명}', '${item.학과명}')">
+                                    🔍 학과 정보 검색
+                                </button>
+
+                                <button class="favorite-button" onclick="saveFavorite('${item.학교명}', '${item.학과명}', '${item.대학소재지}')">
+                                    ⭐ 즐겨찾기
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
         }
+
+        renderRecentSearches();
+        renderFavorites();
+
     </script>
 
 </body>
+
 </html>

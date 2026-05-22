@@ -24,42 +24,50 @@ def load_major_data():
         "학과상세소재지"
     ]
 
-    # 학교명, 학과명 없는 데이터 제거
-    df = df.dropna(subset=["학교명", "학과명"])
+    df = df.dropna(
+        subset=["학교명", "학과명"]
+    )
 
-    # 폐지 학과 제거
-    df = df[df["학과상태"] != "폐지"]
-
-    # 대학원 관련 데이터 제거
     df = df[
-        ~df["학과특성"].astype(str).str.contains("대학원", na=False)
+        df["학과상태"] != "폐지"
     ]
 
     df = df[
-        ~df["학교명"].astype(str).str.contains("대학원", na=False)
+        ~df["학과특성"]
+        .astype(str)
+        .str.contains("대학원", na=False)
     ]
 
-    # 사내대학 제거
     df = df[
-        ~df["학교명"].astype(str).str.contains("사내", na=False)
+        ~df["학교명"]
+        .astype(str)
+        .str.contains("대학원", na=False)
     ]
 
-    # 사이버대학 제거
     df = df[
-        ~df["학교명"].astype(str).str.contains("사이버", na=False)
+        ~df["학교명"]
+        .astype(str)
+        .str.contains("사내", na=False)
     ]
 
-    # 방송통신대학 제거
     df = df[
-        ~df["학교명"].astype(str).str.contains("방송통신", na=False)
+        ~df["학교명"]
+        .astype(str)
+        .str.contains("사이버", na=False)
     ]
 
-    # 기능대학 제거
     df = df[
-        ~df["학교명"].astype(str).str.contains("기능", na=False)
+        ~df["학교명"]
+        .astype(str)
+        .str.contains("방송통신", na=False)
     ]
 
-    # 중복 제거
+    df = df[
+        ~df["학교명"]
+        .astype(str)
+        .str.contains("기능", na=False)
+    ]
+
     df = df.drop_duplicates(
         subset=["학교명", "학과명", "학과소재지"]
     )
@@ -71,15 +79,42 @@ MAJOR_DF = load_major_data()
 
 
 def search_majors(keyword: str):
-    result = MAJOR_DF[
-        MAJOR_DF["학과명"]
-        .astype(str)
-        .str.contains(keyword, case=False, na=False)
-    ]
+    keyword = keyword.strip()
 
-    result = result.head(50)
+    results = []
 
-    return result.to_dict(orient="records")
+    for _, row in MAJOR_DF.iterrows():
+        score = 0
+
+        major_name = str(row["학과명"])
+        university_name = str(row["학교명"])
+        middle_category = str(row["표준중계열"])
+        small_category = str(row["표준소계열"])
+
+        if keyword in major_name:
+            score += 3
+
+        if keyword in middle_category:
+            score += 2
+
+        if keyword in small_category:
+            score += 1
+
+        if keyword in university_name:
+            score += 1
+
+        if score > 0:
+            row_data = row.to_dict()
+            row_data["score"] = score
+            results.append(row_data)
+
+    results = sorted(
+        results,
+        key=lambda item: item["score"],
+        reverse=True
+    )
+
+    return results[:50]
 
 
 def search_by_university(university: str):
