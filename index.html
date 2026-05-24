@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,47 +20,156 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #1f3c88, #4f7cff);
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at top right, #8bb6ff, transparent 28%),
+                        linear-gradient(135deg, #172b75, #4f7cff);
             color: white;
-            padding: 60px 40px 80px;
-            border-bottom-left-radius: 36px;
-            border-bottom-right-radius: 36px;
-            box-shadow: 0 12px 30px rgba(31, 60, 136, 0.25);
+            padding: 70px 40px 100px;
+            border-bottom-left-radius: 38px;
+            border-bottom-right-radius: 38px;
+            box-shadow: 0 16px 36px rgba(31, 60, 136, 0.28);
+        }
+
+        .hero::before {
+            content: "AI";
+            position: absolute;
+            right: 80px;
+            top: 35px;
+            font-size: 140px;
+            font-weight: 800;
+            opacity: 0.08;
+        }
+
+        .hero::after {
+            content: "✦ ✧ ✦";
+            position: absolute;
+            right: 90px;
+            bottom: 35px;
+            font-size: 42px;
+            opacity: 0.25;
         }
 
         .container {
             max-width: 1100px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .service-label {
             display: inline-block;
-            padding: 7px 12px;
+            padding: 8px 14px;
             border-radius: 999px;
             background-color: rgba(255,255,255,0.18);
             font-size: 13px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         h1 {
-            font-size: 42px;
+            font-size: 46px;
             margin: 0 0 12px;
         }
 
         .subtitle {
-            font-size: 18px;
+            font-size: 19px;
             line-height: 1.6;
-            opacity: 0.95;
+            opacity: 0.96;
             margin: 0;
         }
 
         .main {
             max-width: 1000px;
-            margin: -45px auto 40px;
+            margin: -55px auto 40px;
             padding: 0 40px;
         }
 
-        .search-box,
+        .search-box {
+            background: linear-gradient(180deg, #ffffff, #f9fbff);
+            padding: 28px;
+            border-radius: 24px;
+            margin-bottom: 22px;
+            border: 1px solid #dbe4ff;
+            box-shadow:
+                0 22px 45px rgba(31, 60, 136, 0.20),
+                0 0 0 6px rgba(79, 124, 255, 0.08);
+        }
+
+        .search-title {
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #1f3c88;
+            font-size: 18px;
+        }
+
+        .search-desc {
+            color: #6b7280;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input,
+        button {
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 14px;
+            border: 1px solid #d1d5db;
+        }
+
+        input {
+            flex: 1;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #4f7cff;
+            box-shadow: 0 0 0 4px rgba(79, 124, 255, 0.15);
+        }
+
+        button {
+            background: linear-gradient(135deg, #1f3c88, #4f7cff);
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(31, 60, 136, 0.25);
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(31, 60, 136, 0.34);
+        }
+
+        .example-box {
+            margin-top: 15px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .example-label {
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .example-chip {
+            background: #eef2ff;
+            color: #1f3c88;
+            border: 1px solid #dbe4ff;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            box-shadow: none;
+        }
+
         .feature-text,
         .history-box,
         .ai-box,
@@ -71,95 +179,8 @@
             box-shadow: 0 10px 24px rgba(31, 60, 136, 0.08);
         }
 
-        .search-box {
-            background: linear-gradient(180deg, #ffffff, #f9fbff);
-            padding: 26px;
-            border-radius: 22px;
-            margin-bottom: 22px;
-            border: 1px solid #e0e7ff;
-            box-shadow:
-                0 18px 35px rgba(31, 60, 136, 0.18),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-
-        .search-title {
-            font-weight: bold;
-            margin-bottom: 14px;
-            color: #1f3c88;
-        }
-
-        .search-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        select,
-        input,
-        button {
-            padding: 13px;
-            font-size: 16px;
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
-        }
-
-        select {
-            width: 150px;
-            background-color: white;
-        }
-
-        input {
-            flex: 1;
-        }
-
-        button {
-            background: linear-gradient(135deg, #1f3c88, #4f7cff);
-            color: white;
-            cursor: pointer;
-            border: none;
-            font-weight: bold;
-            box-shadow: 0 6px 14px rgba(31, 60, 136, 0.25);
-            transition: 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 18px rgba(31, 60, 136, 0.32);
-        }
-
-        .inside-keywords {
-            margin-top: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            padding-left: 2px;
-        }
-
-        .inside-label {
-            font-size: 13px;
-            color: #6b7280;
-            font-weight: 600;
-        }
-
-        .inside-chip {
-            background: #eef2ff;
-            color: #1f3c88;
-            border: 1px solid #dbe4ff;
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 13px;
-            cursor: pointer;
-            box-shadow: none;
-            transition: 0.15s;
-        }
-
-        .inside-chip:hover {
-            background: #dbe4ff;
-            transform: translateY(-1px);
-        }
-
         .feature-text {
-            background-color: rgba(255,255,255,0.75);
+            background-color: rgba(255,255,255,0.78);
             border: 1px solid #e5e7eb;
             border-radius: 18px;
             padding: 18px 20px;
@@ -180,14 +201,13 @@
         }
 
         .service-stats span {
-            background: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.86);
             border: 1px solid #dbe4ff;
             color: #1f3c88;
             padding: 10px 14px;
             border-radius: 999px;
             font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 8px 18px rgba(31, 60, 136, 0.08);
+            font-weight: 700;
         }
 
         .history-box {
@@ -232,12 +252,6 @@
             box-shadow: none;
         }
 
-        .favorite-button:hover {
-            background: #ffedd5;
-            transform: none;
-            box-shadow: none;
-        }
-
         .delete-favorite {
             margin-left: 8px;
             background: #fee2e2;
@@ -248,10 +262,6 @@
             font-size: 12px;
             cursor: pointer;
             box-shadow: none;
-        }
-
-        .delete-favorite:hover {
-            background: #fecaca;
         }
 
         .clear-history {
@@ -266,23 +276,30 @@
             box-shadow: none;
         }
 
-        .clear-history:hover {
-            background: #e5e7eb;
-        }
-
         .ai-box {
             background: linear-gradient(135deg, #f4f7ff, #ffffff);
             border: 1px solid #dbe4ff;
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 22px;
+            padding: 22px;
             margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-box::after {
+            content: "🤖";
+            position: absolute;
+            right: 22px;
+            top: 18px;
+            font-size: 40px;
+            opacity: 0.18;
         }
 
         .ai-title {
-            font-weight: bold;
+            font-weight: 800;
             color: #1f3c88;
             margin-bottom: 10px;
-            font-size: 17px;
+            font-size: 18px;
         }
 
         .ai-content {
@@ -293,7 +310,7 @@
         #summary {
             margin-bottom: 15px;
             color: #374151;
-            font-weight: bold;
+            font-weight: 800;
         }
 
         .loading-box {
@@ -335,7 +352,6 @@
                 opacity: 0;
                 transform: translateY(12px);
             }
-
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -400,13 +416,6 @@
             box-shadow: none;
         }
 
-        .small-button:hover {
-            background-color: #e9eefc;
-            color: #1f3c88;
-            transform: none;
-            box-shadow: none;
-        }
-
         .empty {
             background-color: white;
             padding: 24px;
@@ -415,7 +424,7 @@
 
         @media (max-width: 700px) {
             .hero {
-                padding: 42px 24px 70px;
+                padding: 42px 24px 80px;
             }
 
             .main {
@@ -428,10 +437,6 @@
 
             .search-row {
                 flex-direction: column;
-            }
-
-            select {
-                width: 100%;
             }
 
             .card {
@@ -465,12 +470,12 @@
 
     <section class="hero">
         <div class="container">
-            <p class="service-label">Public Education Data Major Search Platform</p>
+            <p class="service-label">AI Career & Major Discovery Platform</p>
 
-            <h1>🎓 EduMap AI</h1>
+            <h1>🤖 EduMap AI</h1>
 
             <p class="subtitle">
-                키워드 기반 탐색을 통해 전국 대학의 관련 학과 정보를 빠르게 확인할 수 있는 교육 데이터 검색 서비스입니다.
+                공공데이터와 AI를 활용해 사용자의 관심 분야를 분석하고, 관련 대학 학과를 탐색·추천하는 AI 학과 탐색 서비스입니다.
             </p>
         </div>
     </section>
@@ -479,48 +484,42 @@
 
         <div class="search-box">
             <div class="search-title">
-                관심 키워드, 지역, 학교명을 입력해 학과 정보를 탐색해보세요.
+                AI에게 관심 분야를 자연어로 입력해보세요.
+            </div>
+
+            <div class="search-desc">
+                예: 게임 개발자가 되고 싶어요 / AI랑 반도체 둘 다 관심 있어요 / 병원에서 일하고 싶어요
             </div>
 
             <div class="search-row">
-                <select id="searchType">
-                    <option value="major">학과 키워드</option>
-                    <option value="region">지역</option>
-                    <option value="university">학교명</option>
-                </select>
-
                 <input
                     type="text"
                     id="keyword"
-                    placeholder="예: 게임 개발자가 되고 싶어요, 전기, 광주, 조선대학교"
+                    placeholder="예: 게임 개발자가 되고 싶어요"
                 >
 
-                <button onclick="searchMajor()">🔎 검색</button>
+                <button onclick="searchMajor()">✨ AI 학과 탐색</button>
             </div>
 
-            <div class="inside-keywords">
-                <span class="inside-label">자주 찾는 항목 :</span>
+            <div class="example-box">
+                <span class="example-label">추천 예시 :</span>
 
-                <button class="inside-chip" onclick="quickSearch('AI')">AI</button>
-                <button class="inside-chip" onclick="quickSearch('반도체')">반도체</button>
-                <button class="inside-chip" onclick="quickSearch('컴퓨터')">컴퓨터</button>
-                <button class="inside-chip" onclick="quickSearch('간호')">간호</button>
-                <button class="inside-chip" onclick="quickSearch('디자인')">디자인</button>
-                <button class="inside-chip" onclick="quickSearch('전기')">전기</button>
+                <button class="example-chip" onclick="quickSearch('게임 개발자가 되고 싶어요')">게임 개발</button>
+                <button class="example-chip" onclick="quickSearch('AI랑 반도체 둘 다 관심 있어요')">AI + 반도체</button>
+                <button class="example-chip" onclick="quickSearch('병원에서 일하고 싶어요')">보건·의료</button>
+                <button class="example-chip" onclick="quickSearch('디자인과 개발을 같이 하고 싶어요')">디자인 + 개발</button>
             </div>
         </div>
 
         <div class="feature-text">
-            <strong>학과 키워드 검색</strong> +
-            <strong>지역 기반 탐색</strong> +
-            <strong>학교명 검색</strong><br>
-            관심 분야와 연관된 전국 대학 학과 정보를 빠르게 탐색하고 비교할 수 있습니다.
+            <strong>AI 기반 관심 분야 분석</strong> + <strong>공공데이터 학과 검색</strong><br>
+            사용자의 자연어 입력을 AI가 분석하고, 관련 학과 키워드를 추출해 전국 대학 학과 데이터와 연결합니다.
         </div>
 
         <div class="service-stats">
-            <span>📊 전국 대학 학과 데이터 기반</span>
-            <span>🔎 학과·지역·학교명 통합 검색</span>
-            <span>🤖 GPT API 기반 AI 추천 분석</span>
+            <span>🤖 AI 기반 분석</span>
+            <span>📊 전국 대학 학과 데이터 활용</span>
+            <span>🔎 자연어 기반 학과 탐색</span>
         </div>
 
         <div class="history-box">
@@ -546,7 +545,7 @@
     <script>
         const keywordInput = document.getElementById("keyword");
 
-        let currentSearchType = "";
+        let currentSearchType = "major";
         let currentKeyword = "";
         let currentOffset = 0;
         const LIMIT = 50;
@@ -558,7 +557,6 @@
         });
 
         function quickSearch(keyword) {
-            document.getElementById("searchType").value = "major";
             document.getElementById("keyword").value = keyword;
             searchMajor();
         }
@@ -616,7 +614,6 @@
 
         function removeFavorite(key) {
             let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
             favorites = favorites.filter(item => item.key !== key);
 
             localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -649,33 +646,13 @@
         function getMajorIcon(item) {
             const text = `${item.학과명 || ""} ${item.표준중계열 || ""} ${item.표준소계열 || ""}`;
 
-            if (text.includes("컴퓨터") || text.includes("소프트웨어") || text.includes("AI") || text.includes("인공지능") || text.includes("정보")) {
-                return "💻";
-            }
-
-            if (text.includes("전기") || text.includes("전자") || text.includes("반도체")) {
-                return "⚡";
-            }
-
-            if (text.includes("기계") || text.includes("자동차") || text.includes("로봇")) {
-                return "⚙️";
-            }
-
-            if (text.includes("의학") || text.includes("간호") || text.includes("보건")) {
-                return "🏥";
-            }
-
-            if (text.includes("경영") || text.includes("경제") || text.includes("회계")) {
-                return "📈";
-            }
-
-            if (text.includes("디자인") || text.includes("예술") || text.includes("미술") || text.includes("체육")) {
-                return "🎨";
-            }
-
-            if (text.includes("교육") || text.includes("유아") || text.includes("교직")) {
-                return "📚";
-            }
+            if (text.includes("컴퓨터") || text.includes("소프트웨어") || text.includes("AI") || text.includes("인공지능") || text.includes("정보")) return "💻";
+            if (text.includes("전기") || text.includes("전자") || text.includes("반도체")) return "⚡";
+            if (text.includes("기계") || text.includes("자동차") || text.includes("로봇")) return "⚙️";
+            if (text.includes("의학") || text.includes("간호") || text.includes("보건")) return "🏥";
+            if (text.includes("경영") || text.includes("경제") || text.includes("회계")) return "📈";
+            if (text.includes("디자인") || text.includes("예술") || text.includes("미술") || text.includes("체육")) return "🎨";
+            if (text.includes("교육") || text.includes("유아") || text.includes("교직")) return "📚";
 
             return "🎓";
         }
@@ -710,20 +687,8 @@
             window.open(url, "_blank");
         }
 
-        function buildUrl(searchType, keyword, offset) {
-            if (searchType === "major") {
-                return `/recommend?keyword=${encodeURIComponent(keyword)}&limit=${LIMIT}&offset=${offset}`;
-            }
-
-            if (searchType === "region") {
-                return `/search/region?region=${encodeURIComponent(keyword)}&limit=${LIMIT}&offset=${offset}`;
-            }
-
-            if (searchType === "university") {
-                return `/search/university?university=${encodeURIComponent(keyword)}&limit=${LIMIT}&offset=${offset}`;
-            }
-
-            return "";
+        function buildUrl(keyword, offset) {
+            return `/recommend?keyword=${encodeURIComponent(keyword)}&limit=${LIMIT}&offset=${offset}`;
         }
 
         function renderCards(results, append = false) {
@@ -782,7 +747,6 @@
         }
 
         async function searchMajor() {
-            const searchType = document.getElementById("searchType").value;
             const keyword = document.getElementById("keyword").value.trim();
 
             if (keyword === "") {
@@ -792,11 +756,8 @@
 
             saveRecentSearch(keyword);
 
-            currentSearchType = searchType;
             currentKeyword = keyword;
             currentOffset = 0;
-
-            const url = buildUrl(currentSearchType, currentKeyword, currentOffset);
 
             const aiDiv = document.getElementById("aiRecommendation");
             const summaryDiv = document.getElementById("summary");
@@ -821,7 +782,7 @@
             const aiResult = await generateAIRecommendation(keyword);
             aiDiv.innerHTML = aiResult;
 
-            const response = await fetch(url);
+            const response = await fetch(buildUrl(currentKeyword, currentOffset));
             const data = await response.json();
 
             resultsDiv.innerHTML = "";
@@ -846,7 +807,6 @@
         }
 
         async function loadMoreResults() {
-            const url = buildUrl(currentSearchType, currentKeyword, currentOffset);
             const loadMoreArea = document.getElementById("loadMoreArea");
 
             if (loadMoreArea) {
@@ -855,7 +815,7 @@
                 `;
             }
 
-            const response = await fetch(url);
+            const response = await fetch(buildUrl(currentKeyword, currentOffset));
             const data = await response.json();
 
             renderCards(data.results, true);
@@ -874,5 +834,4 @@
     </script>
 
 </body>
-
 </html>

@@ -1,3 +1,7 @@
+from app.services.ai_service import (
+    generate_ai_recommendation,
+    extract_search_keywords
+)
 from app.services.ai_service import generate_ai_recommendation
 from fastapi import APIRouter
 from app.services.major_service import (
@@ -11,12 +15,46 @@ router = APIRouter()
 
 @router.get("/recommend")
 def recommend(keyword: str, limit: int = 50, offset: int = 0):
-    data = search_majors(keyword, limit, offset)
+
+    keywords = extract_search_keywords(keyword)
+
+    all_results = []
+
+    for k in keywords:
+        data = search_majors(k, limit=9999, offset=0)
+        all_results.extend(data["results"])
+
+    unique_results = []
+
+    seen = set()
+
+    for item in all_results:
+
+        key = (
+            item["학교명"],
+            item["학과명"]
+        )
+
+        if key not in seen:
+            seen.add(key)
+            unique_results.append(item)
+
+    total_count = len(unique_results)
+
+    paginated = unique_results[
+        offset:offset + limit
+    ]
 
     return {
-        "type": "major_keyword",
+        "type": "ai_major_search",
         "keyword": keyword,
-        **data
+        "ai_keywords": keywords,
+        "total_count": total_count,
+        "count": len(paginated),
+        "limit": limit,
+        "offset": offset,
+        "has_more": offset + limit < total_count,
+        "results": paginated
     }
 
 
