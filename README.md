@@ -125,11 +125,12 @@ http://127.0.0.1:8000
 
 ## 📸 Preview
 
-(프로젝트 UI 캡처 예정)
+### EduMap AI Main Screen
+
+![EduMap AI Preview](screenshots/preview.png)
+## 🎯 Future Plans
 
 ---
-
-## 🎯 Future Plans
 
 - 입시 데이터 연동
 - AI 추천 정확도 향상
